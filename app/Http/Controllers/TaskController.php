@@ -11,7 +11,6 @@ class TaskController
 {
     public function index()
     {
-//        $columns = ['*'];
         $columns = ['title', 'description', 'created_at'];
         $result = [
             'data' => Task::where([
@@ -25,12 +24,21 @@ class TaskController
     
     public function show($id)
     {
-        die('show task' . $id);
+        $columns = ['title', 'description', 'created_at', 'updated_at'];
+        $result = [
+            'data' => Task::where([
+                'status' => 1,
+                'id' => $id
+            ])->get($columns),
+            'status' => 'success'
+        ];
+        
+        return $result;
     }
     
     public function create()
     {
-        die('create task');
+        die('create task 1');
     }
     
     public function update($id)
