@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 
 /**
 |--------------------------------------------------------------------------
@@ -27,11 +28,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  * Удаление задачи: DELETE /tasks/{id}.
 |--------------------------------------------------------------------------
  */
-Route::get('/tasks', [PostController::class, 'index']);
-Route::get('/tasks/{id}', [PostController::class, 'show']);
-Route::post('/tasks', [PostController::class, 'create']);
-Route::put('/tasks/{id}', [PostController::class, 'update']);
-Route::delete('/tasks/{id}', [PostController::class, 'destroy']);
+Route::get('/tasks', [TaskController::class, 'index']);
+Route::get('/tasks/{id}', [TaskController::class, 'show']);
+Route::post('/tasks', [TaskController::class, 'create']);
+Route::put('/tasks/{id}', [TaskController::class, 'update']);
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
 // оставлю и дефолтные значения на всякий случай
 //Route::get('/posts', [PostController::class, 'index']);
@@ -39,5 +40,3 @@ Route::delete('/tasks/{id}', [PostController::class, 'destroy']);
 //Route::get('/posts/{id}', [PostController::class, 'show']);
 //Route::put('/posts/{id}', [PostController::class, 'update']);
 //Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-
-
