@@ -20,9 +20,4 @@ class Task extends Model
         'description',
         'status',
     ];
-    
-    $rules = [
-        'title'  => 'required|max:100',
-        'description' => 'required',
-    ];
 }

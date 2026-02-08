@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Http\Requests\TaskRequest;
 
 /**
  * Description of TaskController
@@ -12,16 +13,15 @@ class TaskController
 {
     /**
      * 
-     * @return type
+     * @return array
      */
-    public function index()
+    public function index() : array
     {
         $columns = ['title', 'created_at'];
         $result = [
             'data' => Task::where([
                 'status' => 1
-            ])->get($columns),
-            'status' => 'success'
+            ])->get($columns)
         ];
         
         return $result;
@@ -31,17 +31,16 @@ class TaskController
      * 
      * @param int $id
      * 
-     * @return type
+     * @return array
      */
-    public function show(int $id)
+    public function show(int $id) : array
     {
         $columns = ['title', 'description', 'created_at', 'updated_at'];
         $result = [
             'data' => Task::where([
                 'status' => 1,
                 'id' => $id
-            ])->get($columns),
-            'status' => 'success'
+            ])->get($columns)
         ];
         
         return $result;
@@ -49,43 +48,49 @@ class TaskController
 
     /**
      * 
-     * @param Request $request
+     * @param TaskRequest $request
      * 
-     * @return Task
+     * @return Task|false
      */
-    public function create(Request $request)
+    public function create(TaskRequest $request) : Task|false
     {
         $task = new Task();
-        $task->title = $request->post('title');
-        $task->description = $request->post('description');
-        $task->status = $request->post('status');
+        $validateTask = $request->validate($request->rules());
         
-        $task->save();
+        if ($validateTask) {
+            $task->title = $request->post('title');
+            $task->description = $request->post('description');
+            $task->status = $request->post('status');
+            $task->save();
         
-        return $task;
+            return $task;
+        }
+        
+        return false;
     }
 
     /**
      * 
-     * @param Request $request
+     * @param TaskRequest $request
      * @param int $id
      * 
      * @return Task
      */
-    public function update(Request $request, int $id)
+    public function update(TaskRequest $request, int $id) : Task
     {
         $task = Task::find($id);
+        $validateTask = $request->validate($request->rules());
         
-        if (!empty($task)) {
+        if ($validateTask) {
             if ($request->post('title'))
                 $task->title = $request->post('title');
             if ($request->post('description'))
                 $task->description = $request->post('description');
             if ($request->post('status'))
                 $task->status = $request->post('status');
+            
+            $task->save();
         }
-        
-        $task->save();
 
         return $task;
     }
@@ -96,10 +101,9 @@ class TaskController
      * 
      * @return bool
      */
-    public function delete(int $id)
+    public function delete(int $id) : bool
     {
         $task = Task::find($id);
-        
         if (!empty($task)) {
             $task->delete();
         }
